@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  db:
+    image: postgres
+    networks:
+      - common
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=docker_django
+      - POSTGRES_PASSWORD=password
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/docker-django
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - common
+
+networks:
+  common:
+    driver: bridge
